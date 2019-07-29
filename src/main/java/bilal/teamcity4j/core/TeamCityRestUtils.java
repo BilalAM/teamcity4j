@@ -11,7 +11,8 @@ import javax.ws.rs.core.Response;
 public class TeamCityRestUtils {
 
     private static Client client = ClientBuilder.newClient();
-    private static HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basic("bmirza","samplehAlla");
+    private static HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature
+            .basic("admin", "admin");
     static{
         client.register(httpAuthenticationFeature);
     }
