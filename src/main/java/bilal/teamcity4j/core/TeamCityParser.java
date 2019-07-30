@@ -3,6 +3,8 @@ package bilal.teamcity4j.core;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
+import java.util.List;
+
 public class TeamCityParser {
 
         /**
@@ -19,10 +21,16 @@ public class TeamCityParser {
                         project.setProjectName(projectElement.attributeValue("name"));
                         project.setProjectWebUrl(projectElement.attributeValue("webUrl"));
                         project.setProjectDescription(projectElement.attributeValue("description"));
-                        project.setProjectBuildSteps(null);
+                        // we have the basic project information
+                        // now onwards towards getting the build step information .
+                        List<TeamCityProjectBuildSteps> buildSteps = getBuildStepsOfProject(project.getProjectId());
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
                 return project;
+        }
+
+        public List<TeamCityProjectBuildSteps> getBuildStepsOfProject(String projectId){
+                return null;
         }
 }
