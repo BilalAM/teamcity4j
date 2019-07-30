@@ -7,19 +7,19 @@ public class TeamCityProject {
         private String projectId;
         private String projectDescription;
         private String projectWebUrl;
-        private List<TeamCityProjectBuildSteps> projectBuilds;
+        private List<TeamCityProjectBuildSteps> projectBuildSteps;
 
         public TeamCityProject() {
 
         }
 
         public TeamCityProject(String projectName, String projectId, String projectDescription, String projectWebUrl,
-                List<TeamCityProjectBuildSteps> projectBuilds) {
+                List<TeamCityProjectBuildSteps> projectBuildSteps) {
                 this.projectName = projectName;
                 this.projectId = projectId;
                 this.projectDescription = projectDescription;
                 this.projectWebUrl = projectWebUrl;
-                this.projectBuilds = projectBuilds;
+                this.projectBuildSteps = projectBuildSteps;
         }
 
         public String getProjectName() {
@@ -54,12 +54,17 @@ public class TeamCityProject {
                 this.projectWebUrl = projectWebUrl;
         }
 
-        public List<TeamCityProjectBuildSteps> getProjectBuilds() {
-                return projectBuilds;
+        public List<TeamCityProjectBuildSteps> getProjectBuildSteps() {
+                return projectBuildSteps;
         }
 
-        public void setProjectBuilds(List<TeamCityProjectBuildSteps> projectBuilds) {
-                this.projectBuilds = projectBuilds;
+        public void setProjectBuildSteps(List<TeamCityProjectBuildSteps> projectBuildSteps) {
+                this.projectBuildSteps = projectBuildSteps;
         }
 
+        @Override public String toString() {
+                return "TeamCityProject@[id:" + projectId + "] [name:" + projectName + "] [description:"
+                        + projectDescription + "] [" + "web-url:" + projectWebUrl + "] [TeamCityProjectBuildSteps:"
+                        + projectBuildSteps + "]";
+        }
 }
