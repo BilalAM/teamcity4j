@@ -2,7 +2,7 @@ package bilal.teamcity4j.core;
 
 import java.util.List;
 
-public class TeamCityProjectBuildSteps {
+public class TeamCityProjectBuildType {
         private String buildTypeID;
         private String buildTypeName;
         private String projectName;

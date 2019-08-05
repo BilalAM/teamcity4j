@@ -1,6 +1,6 @@
 package testing;
 
-import bilal.teamcity4j.core.TeamCityGatherer;
+import bilal.teamcity.TeamCityHelper;
 import bilal.teamcity4j.core.TeamCityProject;
 
 public class ClientTest {

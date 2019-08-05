@@ -7,19 +7,19 @@ public class TeamCityProject {
         private String projectId;
         private String projectDescription;
         private String projectWebUrl;
-        private List<TeamCityProjectBuildSteps> projectBuildSteps;
+        private List<TeamCityProjectBuildType> projectbuildTypes;
 
         public TeamCityProject() {
 
         }
 
         public TeamCityProject(String projectName, String projectId, String projectDescription, String projectWebUrl,
-                List<TeamCityProjectBuildSteps> projectBuildSteps) {
+                List<TeamCityProjectBuildType> projectbuildTypes) {
                 this.projectName = projectName;
                 this.projectId = projectId;
                 this.projectDescription = projectDescription;
                 this.projectWebUrl = projectWebUrl;
-                this.projectBuildSteps = projectBuildSteps;
+                this.projectbuildTypes = projectbuildTypes;
         }
 
         public String getProjectName() {
@@ -54,17 +54,17 @@ public class TeamCityProject {
                 this.projectWebUrl = projectWebUrl;
         }
 
-        public List<TeamCityProjectBuildSteps> getProjectBuildSteps() {
-                return projectBuildSteps;
+        public List<TeamCityProjectBuildType> getProjectbuildTypes() {
+                return projectbuildTypes;
         }
 
-        public void setProjectBuildSteps(List<TeamCityProjectBuildSteps> projectBuildSteps) {
-                this.projectBuildSteps = projectBuildSteps;
+        public void setProjectbuildTypes(List<TeamCityProjectBuildType> projectbuildTypes) {
+                this.projectbuildTypes = projectbuildTypes;
         }
 
         @Override public String toString() {
                 return "TeamCityProject@[id:" + projectId + "] [name:" + projectName + "] [description:"
-                        + projectDescription + "] [" + "web-url:" + projectWebUrl + "] [TeamCityProjectBuildSteps:"
-                        + projectBuildSteps + "]";
+                        + projectDescription + "] [" + "web-url:" + projectWebUrl + "] [TeamCityProjectBuildType:"
+                        + projectbuildTypes + "]";
         }
 }

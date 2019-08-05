@@ -5,6 +5,7 @@ import org.dom4j.Node;
 
 public class TeamCityParser {
 
+
         public TeamCityProject getSingleProjectFromSingleNode(Node projectNode) {
                 TeamCityProject project = new TeamCityProject();
                 try {
@@ -19,18 +20,18 @@ public class TeamCityParser {
                 return project;
         }
 
-        public TeamCityProjectBuildSteps parseBuildStepNode(Node buildStepNode) {
-                TeamCityProjectBuildSteps teamCityProjectBuildSteps = new TeamCityProjectBuildSteps();
+        public TeamCityProjectBuildType parsebuildTypeNode(Node buildTypeNode) {
+                TeamCityProjectBuildType teamCityProjectBuildType = new TeamCityProjectBuildType();
                 try {
-                        Element buildStepElement = (Element) buildStepNode;
-                        teamCityProjectBuildSteps.setBuildTypeID(buildStepElement.attributeValue("id"));
-                        teamCityProjectBuildSteps.setBuildTypeName(buildStepElement.attributeValue("name"));
-                        teamCityProjectBuildSteps.setProjectName(buildStepElement.attributeValue("projectName"));
-                        teamCityProjectBuildSteps.setBuildTypeWebUrl(buildStepElement.attributeValue("href"));
+                        Element buildTypeElement = (Element) buildTypeNode;
+                        teamCityProjectBuildType.setBuildTypeID(buildTypeElement.attributeValue("id"));
+                        teamCityProjectBuildType.setBuildTypeName(buildTypeElement.attributeValue("name"));
+                        teamCityProjectBuildType.setProjectName(buildTypeElement.attributeValue("projectName"));
+                        teamCityProjectBuildType.setBuildTypeWebUrl(buildTypeElement.attributeValue("href"));
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
-                return teamCityProjectBuildSteps;
+                return teamCityProjectBuildType;
         }
 
         public TeamCityBuild parseBuildHistoryNode(Node buildHistoryNode) {
@@ -41,7 +42,7 @@ public class TeamCityParser {
                         teamCityBuild.setBuildType(buildHistoryElement.attributeValue("buildTypeId"));
                         teamCityBuild.setState(buildHistoryElement.attributeValue("state"));
                         teamCityBuild.setStatus(buildHistoryElement.attributeValue("status"));
-                        teamCityBuild.setStatus(buildHistoryElement.attributeValue("href"));
+                        teamCityBuild.setWebUrl(buildHistoryElement.attributeValue("href"));
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
