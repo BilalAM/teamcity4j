@@ -10,85 +10,123 @@ import java.util.List;
 
 public class TeamCityGatherer {
 
-    private static String buildStepStatusesOfABuild = "http://localhost:8111/app/rest/buildTypes/%s/builds";
-    private static String buildStatusOfABuild = "http://localhost:8111/app/rest/builds/%s";
         private static final String PROJECTS = "http://localhost:8111/app/rest/projects/";
-    private static SAXReader xmlReader = new SAXReader();
+        private static String SINGLE_PROJECT = "http://localhost:8111/app/rest/projects/id:%s";
+        private static String BUILDTYPE_HISTORY_OF_BUILDTYPE = "http://localhost:8111/app/rest/buildTypes/%s/builds";
+
+        private static SAXReader xmlReader = new SAXReader();
         private static TeamCityParser parser = new TeamCityParser();
 
-    /**
-     * Returns a list of all projects made in Teamcity .
-     *
-     * @return : List of Node objects of all projects
-     */
-    public static List<TeamCityProject> getAllProjects() {
-            List<TeamCityProject> allProjects = new ArrayList<TeamCityProject>();
-            List<Node> allProjectsNodes;
-        try {
-                String allProjectsResponse = (String) TeamCityRestUtils.get(PROJECTS, String.class);
-            Document allProjectsDocument = xmlReader.read(new StringReader(allProjectsResponse));
-                allProjectsNodes = allProjectsDocument.selectNodes("/projects/project");
-                for (Node projectNode : allProjectsNodes) {
-                        TeamCityProject teamCityProject = parser.getSingleProjectFromAllProjects(projectNode);
-                        allProjects.add(teamCityProject);
+        /**
+         * Returns a list of all projects made in Teamcity .
+         *
+         * @return : List of Node objects of all projects
+         */
+        public static List<TeamCityProject> getAllProjects() {
+                List<TeamCityProject> allProjects = new ArrayList<TeamCityProject>();
+
+                List<Node> allProjectsNodes;
+                try {
+                        String allProjectsResponse = (String) TeamCityRestUtils.get(PROJECTS, String.class);
+                        Document allProjectsDocument = xmlReader.read(new StringReader(allProjectsResponse));
+                        allProjectsNodes = allProjectsDocument.selectNodes("/projects/project");
+                        for (Node projectNode : allProjectsNodes) {
+                                TeamCityProject teamCityProject = parser.getSingleProjectFromSingleNode(projectNode);
+                                allProjects.add(teamCityProject);
+                        }
+                } catch (Exception e) {
+                        e.printStackTrace();
                 }
-        } catch (Exception e) {
-            e.printStackTrace();
+                return allProjects;
         }
-        return allProjects;
-    }
 
+        /**
+         * Returns a single TeamCity Project by the specified project id .
+         *
+         * @param projectID : The project id of the teamcity project .
+         * @return : A complete TeamCity Project with all the builds and build history .
+         */
+        public static TeamCityProject getProject(String projectID) {
+                TeamCityProject project = new TeamCityProject();
 
-    /**
-     * Returns a list of all build steps of a particular project
-     * @param projectID : The project id of the url
-     * @return : List of Node objects that consists of all the build steps of a project.
+                String singleProjectUrl = String.format(SINGLE_PROJECT, projectID);
+                String singleProjectResponse;
 
-    public static List<Node> getAllBuildSteps(String projectID){
-        List<Node> buildNameNodes = new ArrayList<Node>();
-        try {
-            String projectBuilds = ((String) TeamCityRestUtils.get(projects + projectID, String.class));
-            Document projectBuildsDocuments = xmlReader.read(new StringReader(projectBuilds));
-            buildNameNodes = projectBuildsDocuments.selectNodes("/project/buildTypes/buildType");
-        }catch (Exception e){
-            e.printStackTrace();
+                Document singleProjectDocument;
+
+                Node singleProjectNode;
+                List<TeamCityProjectBuildSteps> teamCityProjectBuildSteps = new ArrayList<TeamCityProjectBuildSteps>();
+                try {
+                        singleProjectResponse = (String) TeamCityRestUtils.get(singleProjectUrl, String.class);
+                        singleProjectDocument = xmlReader.read(new StringReader(singleProjectResponse));
+                        singleProjectNode = singleProjectDocument.selectSingleNode("/project");
+                        project = parser.getSingleProjectFromSingleNode(singleProjectNode);
+                        for (TeamCityProjectBuildSteps buildStep : getAllBuildSteps(projectID)) {
+                                teamCityProjectBuildSteps.add(buildStep);
+                        }
+                        project.setProjectBuildSteps(teamCityProjectBuildSteps);
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+                return project;
         }
-        return buildNameNodes;
-    }
 
-    /**
-     * Returns a list of all builds history of a particular build step .
-     * @param buildStepName : Build step name of a particular project .
-     * @return : List of Node objects that are all the builds currently made of that projects
+        /**
+         * Returns a list of all build steps of a particular project
+         *
+         * @param projectID : The project id of the url
+         * @return : List of Node objects that consists of all the build steps of a project.
+         */
+        public static List<TeamCityProjectBuildSteps> getAllBuildSteps(String projectID) {
+                List<TeamCityProjectBuildSteps> buildTypes = new ArrayList<TeamCityProjectBuildSteps>();
+                List<Node> allBuildTypesNodes;
 
-    public static List<Node> getAllBuildsOfBuildStep(String buildStepName){
-        List<Node> allBuildsOfBuildStep = new ArrayList<Node>();
-        try{
-            String urlToHit = String.format(buildStepStatusesOfABuild,buildStepName);
-            String outputOfUrl = ((String)TeamCityRestUtils.get(urlToHit,String.class));
-            Document buildStepStatusesDocument = xmlReader.read(new StringReader(outputOfUrl));
-            allBuildsOfBuildStep = buildStepStatusesDocument.selectNodes("builds/build");
-        }catch (Exception e){
-            e.printStackTrace();
+                String buildTypesUrl = String.format(SINGLE_PROJECT, projectID);
+                String buildTypesResponse;
+
+                Document buildTypesDocument;
+                try {
+                        buildTypesResponse = (String) TeamCityRestUtils.get(buildTypesUrl, String.class);
+                        buildTypesDocument = xmlReader.read(new StringReader(buildTypesResponse));
+                        allBuildTypesNodes = buildTypesDocument.selectNodes("/project/buildTypes/buildType");
+
+                        for (Node buildTypeNode : allBuildTypesNodes) {
+                                TeamCityProjectBuildSteps buildStep = parser.parseBuildStepNode(buildTypeNode);
+                                List<TeamCityBuild> buildHistory = getBuildHistoryOfBuildType(
+                                        buildStep.getBuildTypeID());
+                                buildStep.setBuildHistory(buildHistory);
+                                buildTypes.add(buildStep);
+                        }
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+                return buildTypes;
         }
-        return allBuildsOfBuildStep;
-    }
 
-    /**
-     * Returns build information for a specific build ID
-     * @param buildID
-     * @return public static Node getBuildStatusOfBuild(String buildID){
-        Node buildStatus = null;
-        try{
-            String urlToHit = String.format(buildStatusOfABuild,buildID);
-            String outputOfUrl = ((String)TeamCityRestUtils.get(urlToHit,String.class));
-            Document buildStatusDocument = xmlReader.read(new StringReader(outputOfUrl));
-            buildStatus = buildStatusDocument.selectSingleNode("/build");
-
-        }catch (Exception e){
-            e.printStackTrace();
+        /**
+         * Returns a list of all the build history of a particular build type .
+         *
+         * @param buildTypeId : The build type id of that project .
+         * @return : A list of build history .
+         */
+        public static List<TeamCityBuild> getBuildHistoryOfBuildType(String buildTypeId) {
+                List<TeamCityBuild> buildHistory = new ArrayList<TeamCityBuild>();
+                List<Node> buildHistoryNodes;
+                String buildHistoryUrl = String.format(BUILDTYPE_HISTORY_OF_BUILDTYPE, buildTypeId);
+                String buildHistoryResponse;
+                Document buildHistoryDocument;
+                try {
+                        buildHistoryResponse = (String) TeamCityRestUtils.get(buildHistoryUrl, String.class);
+                        buildHistoryDocument = xmlReader.read(new StringReader(buildHistoryResponse));
+                        buildHistoryNodes = buildHistoryDocument.selectNodes("/builds/build");
+                        for (Node buildHistoryNode : buildHistoryNodes) {
+                                TeamCityBuild build = parser.parseBuildHistoryNode(buildHistoryNode);
+                                buildHistory.add(build);
+                        }
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+                return buildHistory;
         }
-        return buildStatus;
-    }
-     */
+
 }
