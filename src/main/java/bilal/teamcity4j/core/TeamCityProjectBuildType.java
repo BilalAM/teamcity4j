@@ -2,6 +2,9 @@ package bilal.teamcity4j.core;
 
 import java.util.List;
 
+/**
+ * @author Bilal Asif Mirza (github.com/BilalAM)
+ */
 public class TeamCityProjectBuildType {
         private String buildTypeID;
         private String buildTypeName;

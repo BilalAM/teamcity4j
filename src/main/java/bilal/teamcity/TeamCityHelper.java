@@ -2,6 +2,7 @@ package bilal.teamcity;
 
 import bilal.teamcity4j.core.*;
 import org.dom4j.Document;
+import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
@@ -9,11 +10,15 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Bilal Asif Mirza (github.com/BilalAM)
+ */
 public class TeamCityHelper {
 
         private static final String PROJECTS = "http://localhost:8111/app/rest/projects/";
         private static String SINGLE_PROJECT = "http://localhost:8111/app/rest/projects/id:%s";
         private static String BUILDTYPE_HISTORY_OF_BUILDTYPE = "http://localhost:8111/app/rest/buildTypes/%s/builds";
+        private static String BUILD = "http://localhost:8111/app/rest/builds/id:%s";
 
         private static SAXReader xmlReader = new SAXReader();
         private static TeamCityParser parser = new TeamCityParser();
@@ -93,8 +98,7 @@ public class TeamCityHelper {
 
                         for (Node buildTypeNode : allBuildTypesNodes) {
                                 TeamCityProjectBuildType buildType = parser.parsebuildTypeNode(buildTypeNode);
-                                List<TeamCityBuild> buildHistory = getBuildHistoryOfBuildType(
-                                        buildType.getBuildTypeID());
+                                List<TeamCityBuild> buildHistory = getBuildHistoryOfBuildType(buildType.getBuildTypeID());
                                 buildType.setBuildHistory(buildHistory);
                                 buildTypes.add(buildType);
                         }
@@ -121,7 +125,17 @@ public class TeamCityHelper {
                         buildHistoryDocument = xmlReader.read(new StringReader(buildHistoryResponse));
                         buildHistoryNodes = buildHistoryDocument.selectNodes("/builds/build");
                         for (Node buildHistoryNode : buildHistoryNodes) {
-                                TeamCityBuild build = parser.parseBuildHistoryNode(buildHistoryNode);
+                                // for each build history node , we are going to take the id
+                                // of each build , fire a url for that particular build and
+                                // further get detailed information about that build such as
+                                // time started , ended and etc .
+                                Element buildElement = (Element) buildHistoryNode;
+                                String buildUrl = String.format(BUILD, buildElement.attributeValue("id"));
+                                String buildResponse = (String) TeamCityRestUtils.get(buildUrl, String.class);
+                                Document buildDocument = xmlReader.read(new StringReader(buildResponse));
+                                Node buildNode = buildDocument.selectSingleNode("/build");
+                                TeamCityBuild build = parser.parseBuildHistoryNode(buildNode);
+                                // we have all the stuff , now add it in the list of build history.
                                 buildHistory.add(build);
                         }
                 } catch (Exception e) {

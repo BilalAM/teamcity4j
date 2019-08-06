@@ -1,7 +1,8 @@
 package bilal.teamcity4j.core;
 
-import java.time.LocalDateTime;
-
+/**
+ * @author Bilal Asif Mirza (github.com/BilalAM)
+ */
 public class TeamCityBuild {
 
         private String buildId;
@@ -9,9 +10,9 @@ public class TeamCityBuild {
         private String status;
         private String state;
         private String webUrl;
-        private LocalDateTime startDate;
+        private String startDate;
 
-        private LocalDateTime endDate;
+        private String endDate;
 
         public String getBuildId() {
                 return buildId;
@@ -53,19 +54,19 @@ public class TeamCityBuild {
                 this.webUrl = webUrl;
         }
 
-        public LocalDateTime getStartDate() {
+        public String getStartDate() {
                 return startDate;
         }
 
-        public void setStartDate(LocalDateTime startDate) {
+        public void setStartDate(String startDate) {
                 this.startDate = startDate;
         }
 
-        public LocalDateTime getEndDate() {
+        public String getEndDate() {
                 return endDate;
         }
 
-        public void setEndDate(LocalDateTime endDate) {
+        public void setEndDate(String endDate) {
                 this.endDate = endDate;
         }
 

@@ -2,6 +2,9 @@ package bilal.teamcity4j.core;
 
 import java.util.List;
 
+/**
+ * @author Bilal Asif Mirza (github.com/BilalAM)
+ */
 public class TeamCityProject {
         private String projectName;
         private String projectId;
@@ -63,8 +66,7 @@ public class TeamCityProject {
         }
 
         @Override public String toString() {
-                return "TeamCityProject@[id:" + projectId + "] [name:" + projectName + "] [description:"
-                        + projectDescription + "] [" + "web-url:" + projectWebUrl + "] [TeamCityProjectBuildType:"
+                return "TeamCityProject@[id:" + projectId + "] [name:" + projectName + "] [description:" + projectDescription + "] [" + "web-url:" + projectWebUrl + "] [TeamCityProjectBuildType:"
                         + projectbuildTypes + "]";
         }
 }
