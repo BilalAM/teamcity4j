@@ -37,13 +37,14 @@ import javax.ws.rs.core.Response;
 public class TeamCityRestUtils {
 
     private static Client client = ClientBuilder.newClient();
-    private static HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basic("admin", "admin");
 
-    static{
+        public static void initiateAuthenticationFeature(String userName, String password) {
+                HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature
+                        .basic(userName, password);
         client.register(httpAuthenticationFeature);
     }
 
-    public static Response post(String url, Object o) {
+        public static Response post(String url, Object o) {
         return client.target(url).request(MediaType.APPLICATION_JSON).post(Entity.entity(o,MediaType.APPLICATION_JSON));
     }
 

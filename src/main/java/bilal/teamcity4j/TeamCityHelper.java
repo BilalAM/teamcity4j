@@ -50,6 +50,9 @@ public class TeamCityHelper {
         private static SAXReader xmlReader = new SAXReader();
         private static TeamCityParser parser = new TeamCityParser();
 
+        static {
+                TeamCityRestUtils.initiateAuthenticationFeature("admin", "admin");
+        }
         /**
          * Returns a list of all projects made in Teamcity .
          *
