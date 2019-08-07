@@ -71,8 +71,8 @@ public class TeamCityParser {
          * @param buildHistoryNode
          * @return
          */
-        public TeamCityBuild parseBuildHistoryNode(Node buildHistoryNode) {
-                TeamCityBuild teamCityBuild = new TeamCityBuild();
+        public TeamCityProjectBuild parseBuildHistoryNode(Node buildHistoryNode) {
+                TeamCityProjectBuild teamCityProjectBuild = new TeamCityProjectBuild();
                 try {
                         Element buildHistoryElement = (Element) buildHistoryNode;
                         LocalDateTime startDateRaw = LocalDateTime.parse(buildHistoryElement.element("startDate").getStringValue(),
@@ -80,17 +80,17 @@ public class TeamCityParser {
                         LocalDateTime endDateRaw = LocalDateTime.parse(buildHistoryElement.element("finishDate").getStringValue(),
                                 DATE_TIME_FORMATTER_RAW);
 
-                        teamCityBuild.setStartDate(startDateRaw.format(DATE_TIME_FORMATTER_PRETTY));
-                        teamCityBuild.setEndDate(endDateRaw.format(DATE_TIME_FORMATTER_PRETTY));
+                        teamCityProjectBuild.setStartDate(startDateRaw.format(DATE_TIME_FORMATTER_PRETTY));
+                        teamCityProjectBuild.setEndDate(endDateRaw.format(DATE_TIME_FORMATTER_PRETTY));
 
-                        teamCityBuild.setBuildId(buildHistoryElement.attributeValue("id"));
-                        teamCityBuild.setBuildType(buildHistoryElement.attributeValue("buildTypeId"));
-                        teamCityBuild.setState(buildHistoryElement.attributeValue("state"));
-                        teamCityBuild.setStatus(buildHistoryElement.attributeValue("status"));
-                        teamCityBuild.setWebUrl(buildHistoryElement.attributeValue("href"));
+                        teamCityProjectBuild.setBuildId(buildHistoryElement.attributeValue("id"));
+                        teamCityProjectBuild.setBuildType(buildHistoryElement.attributeValue("buildTypeId"));
+                        teamCityProjectBuild.setState(buildHistoryElement.attributeValue("state"));
+                        teamCityProjectBuild.setStatus(buildHistoryElement.attributeValue("status"));
+                        teamCityProjectBuild.setWebUrl(buildHistoryElement.attributeValue("href"));
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
-                return teamCityBuild;
+                return teamCityProjectBuild;
         }
 }

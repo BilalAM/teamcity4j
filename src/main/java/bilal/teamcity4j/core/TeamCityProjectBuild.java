@@ -26,7 +26,7 @@ package bilal.teamcity4j.core;
 /**
  * @author Bilal Asif Mirza (github.com/BilalAM)
  */
-public class TeamCityBuild {
+public class TeamCityProjectBuild {
 
         private String buildId;
         private String buildType;

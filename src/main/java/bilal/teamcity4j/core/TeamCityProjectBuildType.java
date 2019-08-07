@@ -33,7 +33,7 @@ public class TeamCityProjectBuildType {
         private String buildTypeName;
         private String projectName;
         private String buildTypeWebUrl;
-        private List<TeamCityBuild> buildHistory;
+        private List<TeamCityProjectBuild> buildHistory;
 
         public String getBuildTypeID() {
                 return buildTypeID;
@@ -59,11 +59,11 @@ public class TeamCityProjectBuildType {
                 this.projectName = projectName;
         }
 
-        public List<TeamCityBuild> getBuildHistory() {
+        public List<TeamCityProjectBuild> getBuildHistory() {
                 return buildHistory;
         }
 
-        public void setBuildHistory(List<TeamCityBuild> buildHistory) {
+        public void setBuildHistory(List<TeamCityProjectBuild> buildHistory) {
                 this.buildHistory = buildHistory;
         }
 

@@ -21,14 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package testing;
+package bilal.teamcity4j.client;
 
-import bilal.teamcity4j.TeamCityHelper;
-import bilal.teamcity4j.core.TeamCityProject;
+import javax.ws.rs.core.Response;
 
-public class ClientTest {
-        public static void main(String[] args) {
-                TeamCityProject teamCityProject = TeamCityHelper.getProject("SelfErp");
+/**
+ * @author Bilal Asif Mirza (github.com/BilalAM)
+ */
+public interface TeamCityRest {
 
-        }
+    Response post(String url , Object o);
+
+    Object get(String url , Class clazz);
 }

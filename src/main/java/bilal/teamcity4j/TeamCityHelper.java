@@ -21,9 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package bilal.teamcity;
+package bilal.teamcity4j;
 
-import bilal.teamcity4j.core.*;
+import bilal.teamcity4j.client.TeamCityRestUtils;
+import bilal.teamcity4j.core.TeamCityParser;
+import bilal.teamcity4j.core.TeamCityProject;
+import bilal.teamcity4j.core.TeamCityProjectBuild;
+import bilal.teamcity4j.core.TeamCityProjectBuildType;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -121,7 +125,8 @@ public class TeamCityHelper {
 
                         for (Node buildTypeNode : allBuildTypesNodes) {
                                 TeamCityProjectBuildType buildType = parser.parsebuildTypeNode(buildTypeNode);
-                                List<TeamCityBuild> buildHistory = getBuildHistoryOfBuildType(buildType.getBuildTypeID());
+                                List<TeamCityProjectBuild> buildHistory = getBuildHistoryOfBuildType(
+                                        buildType.getBuildTypeID());
                                 buildType.setBuildHistory(buildHistory);
                                 buildTypes.add(buildType);
                         }
@@ -137,8 +142,8 @@ public class TeamCityHelper {
          * @param buildTypeId : The build type id of that project .
          * @return : A list of build history .
          */
-        public static List<TeamCityBuild> getBuildHistoryOfBuildType(String buildTypeId) {
-                List<TeamCityBuild> buildHistory = new ArrayList<TeamCityBuild>();
+        public static List<TeamCityProjectBuild> getBuildHistoryOfBuildType(String buildTypeId) {
+                List<TeamCityProjectBuild> buildHistory = new ArrayList<TeamCityProjectBuild>();
                 List<Node> buildHistoryNodes;
                 String buildHistoryUrl = String.format(BUILDTYPE_HISTORY_OF_BUILDTYPE, buildTypeId);
                 String buildHistoryResponse;
@@ -157,7 +162,7 @@ public class TeamCityHelper {
                                 String buildResponse = (String) TeamCityRestUtils.get(buildUrl, String.class);
                                 Document buildDocument = xmlReader.read(new StringReader(buildResponse));
                                 Node buildNode = buildDocument.selectSingleNode("/build");
-                                TeamCityBuild build = parser.parseBuildHistoryNode(buildNode);
+                                TeamCityProjectBuild build = parser.parseBuildHistoryNode(buildNode);
                                 // we have all the stuff , now add it in the list of build history.
                                 buildHistory.add(build);
                         }
