@@ -10,12 +10,12 @@ Running TeamCityHelper.getProject(projectId) will give you a TeamCityProject obj
 ### How to use 
 - See <b>example.ClientTest</b> on how to use this .  
 
-  
- Sample output when running : 
  
  I have a project named Self Erp in my locally deployed TeamCity server with default username and password.
  
  The username and password are defined in the <b>bilal.teamcity4j.TeamCityHelper</b> class
+   
+ Sample output when running : 
  
 ````
  PROJECT NAME        --> Self Erp
