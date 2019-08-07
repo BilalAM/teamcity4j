@@ -1,12 +1,6 @@
 # teamcity4j
 A simple,easy to use and configurable helper for teamcity written in Java ! 
 
-Use bilal.teamcity4j.TeamCityHelper class to use this . 
-
-The structure of object TeamCityProject is like 1 TeamCityProject ---has---> List of TeamCityBuildTypes ---has--> List of TeamCityBuildType history .
-
-Running TeamCityHelper.getProject(projectId) will give you a TeamCityProject object with the above contents already prepared for you . 
-
 ### How to use 
 - See <b>example.ClientTest</b> on how to use this .  
 
@@ -15,7 +9,7 @@ Running TeamCityHelper.getProject(projectId) will give you a TeamCityProject obj
  
  The username and password are defined in the <b>bilal.teamcity4j.TeamCityHelper</b> class
    
- Sample output when running : 
+ <b>Sample output when running example.ClientTest :</b> 
  
 ````
  PROJECT NAME        --> Self Erp
