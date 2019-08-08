@@ -33,11 +33,18 @@ import java.util.List;
 public class ClientTest {
         public static void main(String[] args) {
 
+                //            Get instance of TeamCityHelper
+                //==============================================================================
+                TeamCityHelper helper = TeamCityHelper.getTeamCityHelper();
+                // set credentials to login.
+                helper.setCredentials("admin", "admin");
+
+
                 //                Getting basic information about the project
                 //==================================================================================
-                TeamCityProject myCoolProject = TeamCityHelper.getProject("SelfErp");
 
-                // Getting basic information about the project
+                TeamCityProject myCoolProject = helper.getProject("SelfErp");
+
                 System.out.println("PROJECT NAME        --> " + myCoolProject.getProjectName());
                 System.out.println("PROJECT ID          --> " + myCoolProject.getProjectId());
                 System.out.println("PROJECT DESCRIPTION --> " + myCoolProject.getProjectDescription());

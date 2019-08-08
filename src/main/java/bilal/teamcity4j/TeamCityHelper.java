@@ -50,15 +50,30 @@ public class TeamCityHelper {
         private static SAXReader xmlReader = new SAXReader();
         private static TeamCityParser parser = new TeamCityParser();
 
-        static {
-                TeamCityRestUtils.initiateAuthenticationFeature("admin", "admin");
+        private static TeamCityHelper instance = null;
+
+        public static TeamCityHelper getTeamCityHelper() {
+                if (instance == null) {
+                        return new TeamCityHelper();
+                } else {
+                        return instance;
+                }
         }
+
+        private TeamCityHelper() {
+
+        }
+
+        public void setCredentials(String userName, String password) {
+                TeamCityRestUtils.initiateAuthenticationFeature(userName, password);
+        }
+
         /**
          * Returns a list of all projects made in Teamcity .
          *
          * @return : List of Node objects of all projects
          */
-        public static List<TeamCityProject> getAllProjects() {
+        public List<TeamCityProject> getAllProjects() {
                 List<TeamCityProject> allProjects = new ArrayList<TeamCityProject>();
 
                 List<Node> allProjectsNodes;
@@ -82,7 +97,7 @@ public class TeamCityHelper {
          * @param projectID : The project id of the teamcity project .
          * @return : A complete TeamCity Project with all the builds and build history .
          */
-        public static TeamCityProject getProject(String projectID) {
+        public TeamCityProject getProject(String projectID) {
                 TeamCityProject project = new TeamCityProject();
 
                 String singleProjectUrl = String.format(SINGLE_PROJECT, projectID);
@@ -113,7 +128,7 @@ public class TeamCityHelper {
          * @param projectID : The project id of the url
          * @return : List of Node objects that consists of all the build steps of a project.
          */
-        public static List<TeamCityProjectBuildType> getAllbuildTypes(String projectID) {
+        public List<TeamCityProjectBuildType> getAllbuildTypes(String projectID) {
                 List<TeamCityProjectBuildType> buildTypes = new ArrayList<TeamCityProjectBuildType>();
                 List<Node> allBuildTypesNodes;
 
@@ -145,7 +160,7 @@ public class TeamCityHelper {
          * @param buildTypeId : The build type id of that project .
          * @return : A list of build history .
          */
-        public static List<TeamCityProjectBuild> getBuildHistoryOfBuildType(String buildTypeId) {
+        public List<TeamCityProjectBuild> getBuildHistoryOfBuildType(String buildTypeId) {
                 List<TeamCityProjectBuild> buildHistory = new ArrayList<TeamCityProjectBuild>();
                 List<Node> buildHistoryNodes;
                 String buildHistoryUrl = String.format(BUILDTYPE_HISTORY_OF_BUILDTYPE, buildTypeId);
