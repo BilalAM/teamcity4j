@@ -7,7 +7,7 @@ A simple,easy to use and configurable helper for teamcity written in Java !
  
  I have a project named Self Erp in my locally deployed TeamCity server with default username and password.
  
- The username and password are defined in the <b>bilal.teamcity4j.TeamCityHelper</b> class
+ The username and password shoud be defined in the <b>bilal.teamcity4j.TeamCityHelper</b> class.
    
  <b>Sample output when running example.ClientTest :</b> 
  
