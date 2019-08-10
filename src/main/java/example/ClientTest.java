@@ -38,6 +38,8 @@ public class ClientTest {
                 TeamCityHelper helper = TeamCityHelper.getTeamCityHelper();
                 // set credentials to login.
                 helper.setCredentials("admin", "admin");
+                //set server url
+                helper.setHost("http://localhost:8111");
 
 
                 //                Getting basic information about the project

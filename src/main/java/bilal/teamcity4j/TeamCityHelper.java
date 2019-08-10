@@ -42,16 +42,22 @@ import java.util.List;
  */
 public class TeamCityHelper {
 
-        private static final String PROJECTS = "http://localhost:8111/app/rest/projects/";
-        private static String SINGLE_PROJECT = "http://localhost:8111/app/rest/projects/id:%s";
-        private static String BUILDTYPE_HISTORY_OF_BUILDTYPE = "http://localhost:8111/app/rest/buildTypes/%s/builds";
-        private static String BUILD = "http://localhost:8111/app/rest/builds/id:%s";
+        private String hostUrl;
+        private static final String PROJECTS = "%s/app/rest/projects/";
+        private static String SINGLE_PROJECT = "%s/app/rest/projects/id:%s";
+        private static String BUILDTYPE_HISTORY_OF_BUILDTYPE = "%s/app/rest/buildTypes/%s/builds";
+        private static String BUILD = "%s/app/rest/builds/id:%s";
 
         private static SAXReader xmlReader = new SAXReader();
         private static TeamCityParser parser = new TeamCityParser();
 
         private static TeamCityHelper instance = null;
 
+        /**
+         * Singleton implementation .
+         *
+         * @return : An instance of TeamCityHelper.
+         */
         public static TeamCityHelper getTeamCityHelper() {
                 if (instance == null) {
                         return new TeamCityHelper();
@@ -64,10 +70,6 @@ public class TeamCityHelper {
 
         }
 
-        public void setCredentials(String userName, String password) {
-                TeamCityRestUtils.initiateAuthenticationFeature(userName, password);
-        }
-
         /**
          * Returns a list of all projects made in Teamcity .
          *
@@ -78,7 +80,8 @@ public class TeamCityHelper {
 
                 List<Node> allProjectsNodes;
                 try {
-                        String allProjectsResponse = (String) TeamCityRestUtils.get(PROJECTS, String.class);
+                        String urlToHit = String.format(PROJECTS, hostUrl);
+                        String allProjectsResponse = (String) TeamCityRestUtils.get(urlToHit, String.class);
                         Document allProjectsDocument = xmlReader.read(new StringReader(allProjectsResponse));
                         allProjectsNodes = allProjectsDocument.selectNodes("/projects/project");
                         for (Node projectNode : allProjectsNodes) {
@@ -100,7 +103,7 @@ public class TeamCityHelper {
         public TeamCityProject getProject(String projectID) {
                 TeamCityProject project = new TeamCityProject();
 
-                String singleProjectUrl = String.format(SINGLE_PROJECT, projectID);
+                String singleProjectUrl = String.format(SINGLE_PROJECT, hostUrl, projectID);
                 String singleProjectResponse;
 
                 Document singleProjectDocument;
@@ -132,7 +135,7 @@ public class TeamCityHelper {
                 List<TeamCityProjectBuildType> buildTypes = new ArrayList<TeamCityProjectBuildType>();
                 List<Node> allBuildTypesNodes;
 
-                String buildTypesUrl = String.format(SINGLE_PROJECT, projectID);
+                String buildTypesUrl = String.format(SINGLE_PROJECT, hostUrl, projectID);
                 String buildTypesResponse;
 
                 Document buildTypesDocument;
@@ -163,7 +166,7 @@ public class TeamCityHelper {
         public List<TeamCityProjectBuild> getBuildHistoryOfBuildType(String buildTypeId) {
                 List<TeamCityProjectBuild> buildHistory = new ArrayList<TeamCityProjectBuild>();
                 List<Node> buildHistoryNodes;
-                String buildHistoryUrl = String.format(BUILDTYPE_HISTORY_OF_BUILDTYPE, buildTypeId);
+                String buildHistoryUrl = String.format(BUILDTYPE_HISTORY_OF_BUILDTYPE, hostUrl, buildTypeId);
                 String buildHistoryResponse;
                 Document buildHistoryDocument;
                 try {
@@ -176,7 +179,7 @@ public class TeamCityHelper {
                                 // further get detailed information about that build such as
                                 // time started , ended and etc .
                                 Element buildElement = (Element) buildHistoryNode;
-                                String buildUrl = String.format(BUILD, buildElement.attributeValue("id"));
+                                String buildUrl = String.format(BUILD, hostUrl, buildElement.attributeValue("id"));
                                 String buildResponse = (String) TeamCityRestUtils.get(buildUrl, String.class);
                                 Document buildDocument = xmlReader.read(new StringReader(buildResponse));
                                 Node buildNode = buildDocument.selectSingleNode("/build");
@@ -190,4 +193,26 @@ public class TeamCityHelper {
                 return buildHistory;
         }
 
+        /**
+         * Sets the teamcity url .
+         *
+         * @param hostUrl : The teamcity URL.
+         */
+        public void setHost(String hostUrl) {
+                this.hostUrl = hostUrl;
+        }
+
+        public String getHost() {
+                return this.hostUrl;
+        }
+
+        /**
+         * Sets the username and password to login into teamcity server .
+         *
+         * @param userName : The username of account .
+         * @param password : The password in plain text .
+         */
+        public void setCredentials(String userName, String password) {
+                TeamCityRestUtils.initiateAuthenticationFeature(userName, password);
+        }
 }
