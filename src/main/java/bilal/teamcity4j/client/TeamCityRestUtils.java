@@ -36,19 +36,20 @@ import javax.ws.rs.core.Response;
  */
 public class TeamCityRestUtils {
 
-    private static Client client = ClientBuilder.newClient();
+        private static Client restClient = ClientBuilder.newClient();
 
         public static void initiateAuthenticationFeature(String userName, String password) {
                 HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature
                         .basic(userName, password);
-        client.register(httpAuthenticationFeature);
+                restClient.register(httpAuthenticationFeature);
     }
 
-        public static Response post(String url, Object o) {
-        return client.target(url).request(MediaType.APPLICATION_JSON).post(Entity.entity(o,MediaType.APPLICATION_JSON));
+        public static Response postObject(String urlToHit, Object objectToSend) {
+                return restClient.target(urlToHit).request(MediaType.APPLICATION_JSON)
+                        .post(Entity.entity(objectToSend, MediaType.APPLICATION_JSON));
     }
 
-    public static Object get(String url, Class clazz) {
-        return client.target(url).request(MediaType.APPLICATION_XML).get(clazz);
+        public static Object getResponseAsObject(String urlToHit, Class responseTypeAsClass) {
+                return restClient.target(urlToHit).request(MediaType.APPLICATION_XML).get(responseTypeAsClass);
     }
 }

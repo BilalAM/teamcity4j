@@ -81,7 +81,8 @@ public class TeamCityHelper {
                 List<Node> allProjectsNodes;
                 try {
                         String urlToHit = String.format(PROJECTS, hostUrl);
-                        String allProjectsResponse = (String) TeamCityRestUtils.get(urlToHit, String.class);
+                        String allProjectsResponse = (String) TeamCityRestUtils
+                                .getResponseAsObject(urlToHit, String.class);
                         Document allProjectsDocument = xmlReader.read(new StringReader(allProjectsResponse));
                         allProjectsNodes = allProjectsDocument.selectNodes("/projects/project");
                         for (Node projectNode : allProjectsNodes) {
@@ -111,7 +112,8 @@ public class TeamCityHelper {
                 Node singleProjectNode;
                 List<TeamCityProjectBuildType> teamCityProjectbuildTypes = new ArrayList<TeamCityProjectBuildType>();
                 try {
-                        singleProjectResponse = (String) TeamCityRestUtils.get(singleProjectUrl, String.class);
+                        singleProjectResponse = (String) TeamCityRestUtils
+                                .getResponseAsObject(singleProjectUrl, String.class);
                         singleProjectDocument = xmlReader.read(new StringReader(singleProjectResponse));
                         singleProjectNode = singleProjectDocument.selectSingleNode("/project");
                         project = parser.getSingleProjectFromSingleNode(singleProjectNode);
@@ -140,7 +142,8 @@ public class TeamCityHelper {
 
                 Document buildTypesDocument;
                 try {
-                        buildTypesResponse = (String) TeamCityRestUtils.get(buildTypesUrl, String.class);
+                        buildTypesResponse = (String) TeamCityRestUtils
+                                .getResponseAsObject(buildTypesUrl, String.class);
                         buildTypesDocument = xmlReader.read(new StringReader(buildTypesResponse));
                         allBuildTypesNodes = buildTypesDocument.selectNodes("/project/buildTypes/buildType");
 
@@ -170,7 +173,8 @@ public class TeamCityHelper {
                 String buildHistoryResponse;
                 Document buildHistoryDocument;
                 try {
-                        buildHistoryResponse = (String) TeamCityRestUtils.get(buildHistoryUrl, String.class);
+                        buildHistoryResponse = (String) TeamCityRestUtils
+                                .getResponseAsObject(buildHistoryUrl, String.class);
                         buildHistoryDocument = xmlReader.read(new StringReader(buildHistoryResponse));
                         buildHistoryNodes = buildHistoryDocument.selectNodes("/builds/build");
                         for (Node buildHistoryNode : buildHistoryNodes) {
@@ -180,7 +184,8 @@ public class TeamCityHelper {
                                 // time started , ended and etc .
                                 Element buildElement = (Element) buildHistoryNode;
                                 String buildUrl = String.format(BUILD, hostUrl, buildElement.attributeValue("id"));
-                                String buildResponse = (String) TeamCityRestUtils.get(buildUrl, String.class);
+                                String buildResponse = (String) TeamCityRestUtils
+                                        .getResponseAsObject(buildUrl, String.class);
                                 Document buildDocument = xmlReader.read(new StringReader(buildResponse));
                                 Node buildNode = buildDocument.selectSingleNode("/build");
                                 TeamCityProjectBuild build = parser.parseBuildHistoryNode(buildNode);
