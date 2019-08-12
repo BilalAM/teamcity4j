@@ -43,7 +43,7 @@ import java.util.List;
  */
 public class TeamCityHelper {
 
-        private static final Logger LOGGER = Logger.getLogger(TeamCityParser.class);
+        private static final Logger LOGGER = Logger.getLogger(TeamCityHelper.class);
 
 
         private String hostUrl;
