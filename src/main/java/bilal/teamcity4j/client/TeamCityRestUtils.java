@@ -23,6 +23,7 @@
  */
 package bilal.teamcity4j.client;
 
+import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.ws.rs.client.Client;
@@ -37,6 +38,7 @@ import javax.ws.rs.core.Response;
 public class TeamCityRestUtils {
 
         private static Client restClient = ClientBuilder.newClient();
+        private static final Logger LOGGER = Logger.getLogger(TeamCityRestUtils.class);
 
         public static void initiateAuthenticationFeature(String userName, String password) {
                 HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature
@@ -50,6 +52,8 @@ public class TeamCityRestUtils {
     }
 
         public static Object getResponseAsObject(String urlToHit, Class responseTypeAsClass) {
+                LOGGER.info("Firing [ GET ] request to [ " + urlToHit + " ] with response type to return as [ "
+                        + responseTypeAsClass + " ]");
                 return restClient.target(urlToHit).request(MediaType.APPLICATION_XML).get(responseTypeAsClass);
     }
 }

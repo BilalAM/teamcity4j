@@ -28,6 +28,7 @@ import bilal.teamcity4j.core.TeamCityParser;
 import bilal.teamcity4j.core.TeamCityProject;
 import bilal.teamcity4j.core.TeamCityProjectBuild;
 import bilal.teamcity4j.core.TeamCityProjectBuildType;
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -41,6 +42,9 @@ import java.util.List;
  * @author Bilal Asif Mirza (github.com/BilalAM)
  */
 public class TeamCityHelper {
+
+        private static final Logger LOGGER = Logger.getLogger(TeamCityParser.class);
+
 
         private String hostUrl;
         private static final String PROJECTS = "%s/app/rest/projects/";
@@ -81,16 +85,22 @@ public class TeamCityHelper {
                 List<Node> allProjectsNodes;
                 try {
                         String urlToHit = String.format(PROJECTS, hostUrl);
+                        LOGGER.info("Initialized URL as [ " + urlToHit + " ]");
                         String allProjectsResponse = (String) TeamCityRestUtils
                                 .getResponseAsObject(urlToHit, String.class);
                         Document allProjectsDocument = xmlReader.read(new StringReader(allProjectsResponse));
+                        LOGGER.info("Selecting nodes to parse :  [ /projects/project ] ");
                         allProjectsNodes = allProjectsDocument.selectNodes("/projects/project");
+                        LOGGER.info("Total nodes [ " + allProjectsNodes.size() + " ] ");
                         for (Node projectNode : allProjectsNodes) {
                                 TeamCityProject teamCityProject = parser.getSingleProjectFromSingleNode(projectNode);
                                 allProjects.add(teamCityProject);
+                                LOGGER.info("TeamCityProject [ " + teamCityProject.getProjectName()
+                                        + " ] has been parsed and prepared.");
                         }
                 } catch (Exception e) {
-                        e.printStackTrace();
+                        String message = "Error has occurred , check logs";
+                        LOGGER.error(message, e);
                 }
                 return allProjects;
         }
@@ -102,9 +112,11 @@ public class TeamCityHelper {
          * @return : A complete TeamCity Project with all the builds and build history .
          */
         public TeamCityProject getProject(String projectID) {
+                LOGGER.info("Getting a single project by projectID [ " + projectID + " ]");
                 TeamCityProject project = new TeamCityProject();
 
                 String singleProjectUrl = String.format(SINGLE_PROJECT, hostUrl, projectID);
+                LOGGER.info("Initialized URL as [ " + singleProjectUrl + " ]");
                 String singleProjectResponse;
 
                 Document singleProjectDocument;
@@ -116,13 +128,17 @@ public class TeamCityHelper {
                                 .getResponseAsObject(singleProjectUrl, String.class);
                         singleProjectDocument = xmlReader.read(new StringReader(singleProjectResponse));
                         singleProjectNode = singleProjectDocument.selectSingleNode("/project");
+                        LOGGER.info("Selecting node to parse :  [ /project ] ");
                         project = parser.getSingleProjectFromSingleNode(singleProjectNode);
+                        LOGGER.info(
+                                "Basic project level information has been prepared , now moving towards build types and build history");
                         for (TeamCityProjectBuildType buildType : getAllbuildTypes(projectID)) {
                                 teamCityProjectbuildTypes.add(buildType);
                         }
                         project.setProjectbuildTypes(teamCityProjectbuildTypes);
                 } catch (Exception e) {
-                        e.printStackTrace();
+                        String message = "Error has occurred , check logs";
+                        LOGGER.error(message, e);
                 }
                 return project;
         }
@@ -134,10 +150,14 @@ public class TeamCityHelper {
          * @return : List of Node objects that consists of all the build steps of a project.
          */
         public List<TeamCityProjectBuildType> getAllbuildTypes(String projectID) {
+                LOGGER.info("Getting all build types of project [ " + projectID + " ]");
+
                 List<TeamCityProjectBuildType> buildTypes = new ArrayList<TeamCityProjectBuildType>();
                 List<Node> allBuildTypesNodes;
 
                 String buildTypesUrl = String.format(SINGLE_PROJECT, hostUrl, projectID);
+                LOGGER.info("Initialized URL as [ " + buildTypesUrl + " ]");
+
                 String buildTypesResponse;
 
                 Document buildTypesDocument;
@@ -146,16 +166,25 @@ public class TeamCityHelper {
                                 .getResponseAsObject(buildTypesUrl, String.class);
                         buildTypesDocument = xmlReader.read(new StringReader(buildTypesResponse));
                         allBuildTypesNodes = buildTypesDocument.selectNodes("/project/buildTypes/buildType");
+                        LOGGER.info("Selecting node to parse :  [ /project/buildTypes/buildType ] ");
 
                         for (Node buildTypeNode : allBuildTypesNodes) {
                                 TeamCityProjectBuildType buildType = parser.parsebuildTypeNode(buildTypeNode);
+                                LOGGER.info("TeamCityProject build type [ " + buildType.getBuildTypeID()
+                                        + " ] basic information has been parsed");
+                                LOGGER.info("Now getting corresponding build history of build type [ " + buildType
+                                        .getBuildTypeID() + " ] ");
                                 List<TeamCityProjectBuild> buildHistory = getBuildHistoryOfBuildType(
                                         buildType.getBuildTypeID());
                                 buildType.setBuildHistory(buildHistory);
                                 buildTypes.add(buildType);
+                                LOGGER.info("TeamCityProject build type [ " + buildType.getBuildTypeID()
+                                        + " ] with build history of [ " + buildHistory.size()
+                                        + " ] size has been prepared");
                         }
                 } catch (Exception e) {
-                        e.printStackTrace();
+                        String message = "Error has occurred , check logs";
+                        LOGGER.error(message, e);
                 }
                 return buildTypes;
         }
@@ -193,7 +222,8 @@ public class TeamCityHelper {
                                 buildHistory.add(build);
                         }
                 } catch (Exception e) {
-                        e.printStackTrace();
+                        String message = "Error has occurred , check logs";
+                        LOGGER.error(message, e);
                 }
                 return buildHistory;
         }

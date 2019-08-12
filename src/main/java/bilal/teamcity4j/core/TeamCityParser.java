@@ -37,6 +37,13 @@ public class TeamCityParser {
         private static final DateTimeFormatter DATE_TIME_FORMATTER_RAW = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmssZ");
         private static final DateTimeFormatter DATE_TIME_FORMATTER_PRETTY = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+        /**
+         * Returns a single {@link TeamCityProject} object by parsing the <b>/projects</b> node .
+         * Basic project level information is gathered over here .
+         *
+         * @param projectNode : The /projects level node .
+         * @return : A {@link TeamCityProject} object .
+         */
         public TeamCityProject getSingleProjectFromSingleNode(Node projectNode) {
                 TeamCityProject project = new TeamCityProject();
                 try {
@@ -46,7 +53,7 @@ public class TeamCityParser {
                         project.setProjectWebUrl(projectElement.attributeValue("webUrl"));
                         project.setProjectDescription(projectElement.attributeValue("description"));
                 } catch (Exception e) {
-                        e.printStackTrace();
+                        // do nothing , let TeamCityHelper handle it
                 }
                 return project;
         }
@@ -60,7 +67,7 @@ public class TeamCityParser {
                         teamCityProjectBuildType.setProjectName(buildTypeElement.attributeValue("projectName"));
                         teamCityProjectBuildType.setBuildTypeWebUrl(buildTypeElement.attributeValue("href"));
                 } catch (Exception e) {
-                        e.printStackTrace();
+                        // do nothing , let TeamCityHelper handle it
                 }
                 return teamCityProjectBuildType;
         }
@@ -89,7 +96,7 @@ public class TeamCityParser {
                         teamCityProjectBuild.setStatus(buildHistoryElement.attributeValue("status"));
                         teamCityProjectBuild.setWebUrl(buildHistoryElement.attributeValue("href"));
                 } catch (Exception e) {
-                        e.printStackTrace();
+                        // do nothing , let TeamCityHelper handle it
                 }
                 return teamCityProjectBuild;
         }
