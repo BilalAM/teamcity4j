@@ -53,7 +53,8 @@ public class TeamCityParser {
                         project.setProjectWebUrl(projectElement.attributeValue("webUrl"));
                         project.setProjectDescription(projectElement.attributeValue("description"));
                 } catch (Exception e) {
-                        // do nothing , let TeamCityHelper handle it
+                        // do nothing , let TeamCityHelper handle it.
+                        // we don't need huge error logs , one is enough.
                 }
                 return project;
         }
@@ -68,6 +69,7 @@ public class TeamCityParser {
                         teamCityProjectBuildType.setBuildTypeWebUrl(buildTypeElement.attributeValue("href"));
                 } catch (Exception e) {
                         // do nothing , let TeamCityHelper handle it
+                        // we don't need huge error logs , one is enough.
                 }
                 return teamCityProjectBuildType;
         }
@@ -97,6 +99,7 @@ public class TeamCityParser {
                         teamCityProjectBuild.setWebUrl(buildHistoryElement.attributeValue("href"));
                 } catch (Exception e) {
                         // do nothing , let TeamCityHelper handle it
+                        // we don't need huge error logs , one is enough.
                 }
                 return teamCityProjectBuild;
         }
