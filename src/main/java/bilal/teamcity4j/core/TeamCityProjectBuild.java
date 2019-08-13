@@ -28,69 +28,69 @@ package bilal.teamcity4j.core;
  */
 public class TeamCityProjectBuild {
 
-        private String buildId;
-        private String buildType;
-        private String status;
-        private String state;
-        private String webUrl;
-        private String startDate;
+    private String buildId;
+    private String buildType;
+    private String status;
+    private String state;
+    private String webUrl;
+    private String startDate;
 
-        private String endDate;
+    private String endDate;
 
-        public String getBuildId() {
-                return buildId;
-        }
+    public String getBuildId() {
+        return buildId;
+    }
 
-        public void setBuildId(String buildId) {
-                this.buildId = buildId;
-        }
+    public void setBuildId(String buildId) {
+        this.buildId = buildId;
+    }
 
-        public String getBuildType() {
-                return buildType;
-        }
+    public String getBuildType() {
+        return buildType;
+    }
 
-        public void setBuildType(String buildType) {
-                this.buildType = buildType;
-        }
+    public void setBuildType(String buildType) {
+        this.buildType = buildType;
+    }
 
-        public String getStatus() {
-                return status;
-        }
+    public String getStatus() {
+        return status;
+    }
 
-        public void setStatus(String status) {
-                this.status = status;
-        }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-        public String getState() {
-                return state;
-        }
+    public String getState() {
+        return state;
+    }
 
-        public void setState(String state) {
-                this.state = state;
-        }
+    public void setState(String state) {
+        this.state = state;
+    }
 
-        public String getWebUrl() {
-                return webUrl;
-        }
+    public String getWebUrl() {
+        return webUrl;
+    }
 
-        public void setWebUrl(String webUrl) {
-                this.webUrl = webUrl;
-        }
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl;
+    }
 
-        public String getStartDate() {
-                return startDate;
-        }
+    public String getStartDate() {
+        return startDate;
+    }
 
-        public void setStartDate(String startDate) {
-                this.startDate = startDate;
-        }
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
 
-        public String getEndDate() {
-                return endDate;
-        }
+    public String getEndDate() {
+        return endDate;
+    }
 
-        public void setEndDate(String endDate) {
-                this.endDate = endDate;
-        }
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
 }

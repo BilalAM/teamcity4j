@@ -31,57 +31,50 @@ import bilal.teamcity4j.core.TeamCityProjectBuildType;
 import java.util.List;
 
 public class ClientTest {
-        public static void main(String[] args) {
+    public static void main(String[] args) {
 
-                //            Get instance of TeamCityHelper
-                //==============================================================================
-                TeamCityHelper helper = TeamCityHelper.getTeamCityHelper();
-                // set credentials to login.
-                helper.setCredentials("admin", "admin");
-                //set server url
-                helper.setHost("http://localhost:8111");
+        // Get instance of TeamCityHelper
+        // ==============================================================================
+        TeamCityHelper helper = TeamCityHelper.getTeamCityHelper();
+        // set credentials to login.
+        helper.setCredentials("admin", "admin");
+        // set server url
+        helper.setHost("http://localhost:8111");
 
+        // Getting basic information about the project
+        // ==================================================================================
 
-                //                Getting basic information about the project
-                //==================================================================================
+        TeamCityProject myCoolProject = helper.getProject("SelfErp");
 
-                TeamCityProject myCoolProject = helper.getProject("SelfErp");
+        System.out.println("PROJECT NAME        --> " + myCoolProject.getProjectName());
+        System.out.println("PROJECT ID          --> " + myCoolProject.getProjectId());
+        System.out.println("PROJECT DESCRIPTION --> " + myCoolProject.getProjectDescription());
+        System.out.println("PROJECT URL         --> " + myCoolProject.getProjectWebUrl());
+        // ==================================================================================
 
-                System.out.println("PROJECT NAME        --> " + myCoolProject.getProjectName());
-                System.out.println("PROJECT ID          --> " + myCoolProject.getProjectId());
-                System.out.println("PROJECT DESCRIPTION --> " + myCoolProject.getProjectDescription());
-                System.out.println("PROJECT URL         --> " + myCoolProject.getProjectWebUrl());
-                //==================================================================================
+        // Getting the build types of that project
+        // ==================================================================================
+        List<TeamCityProjectBuildType> buildTypes = myCoolProject.getProjectbuildTypes();
+        for (TeamCityProjectBuildType buildType : buildTypes) {
+            System.out.println("--------> BUILD TYPE NAME  --> " + buildType.getBuildTypeName());
+            System.out.println("--------> BUILD TYPE ID    --> " + buildType.getBuildTypeID());
+            System.out.println("--------> BUILD TYPE URL   --> " + buildType.getBuildTypeWebUrl());
 
-                //                Getting the build types of that project
-                //==================================================================================
-                List<TeamCityProjectBuildType> buildTypes = myCoolProject.getProjectbuildTypes();
-                for (TeamCityProjectBuildType buildType : buildTypes) {
-                        System.out.println("--------> BUILD TYPE NAME  --> " + buildType.getBuildTypeName());
-                        System.out.println("--------> BUILD TYPE ID    --> " + buildType.getBuildTypeID());
-                        System.out.println("--------> BUILD TYPE URL   --> " + buildType.getBuildTypeWebUrl());
-
-                        //         Getting the build history of that project and information related to the builds
-                        //=================================================================================================
-                        for (TeamCityProjectBuild teamCityProjectBuild : buildType.getBuildHistory()) {
-                                System.out.println(
-                                        "---------------> BUILD ID     --> " + teamCityProjectBuild.getBuildId());
-                                System.out.println(
-                                        "---------------> BUILD TYPE   --> " + teamCityProjectBuild.getBuildType());
-                                System.out.println(
-                                        "---------------> BUILD STATE  --> " + teamCityProjectBuild.getState());
-                                System.out.println(
-                                        "---------------> BUILD STATUS --> " + teamCityProjectBuild.getStatus());
-                                System.out.println(
-                                        "---------------> START DATE   --> " + teamCityProjectBuild.getStartDate());
-                                System.out.println(
-                                        "---------------> END DATE     --> " + teamCityProjectBuild.getEndDate());
-                        }
-                        System.out.println("\n");
-
-                }
-                System.out.println("\n");
+            // Getting the build history of that project and information related to the builds
+            // =================================================================================================
+            for (TeamCityProjectBuild teamCityProjectBuild : buildType.getBuildHistory()) {
+                System.out.println("---------------> BUILD ID     --> " + teamCityProjectBuild.getBuildId());
+                System.out.println("---------------> BUILD TYPE   --> " + teamCityProjectBuild.getBuildType());
+                System.out.println("---------------> BUILD STATE  --> " + teamCityProjectBuild.getState());
+                System.out.println("---------------> BUILD STATUS --> " + teamCityProjectBuild.getStatus());
+                System.out.println("---------------> START DATE   --> " + teamCityProjectBuild.getStartDate());
+                System.out.println("---------------> END DATE     --> " + teamCityProjectBuild.getEndDate());
+            }
+            System.out.println("\n");
 
         }
+        System.out.println("\n");
+
+    }
 
 }

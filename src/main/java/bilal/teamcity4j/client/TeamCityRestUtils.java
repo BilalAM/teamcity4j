@@ -37,23 +37,22 @@ import javax.ws.rs.core.Response;
  */
 public class TeamCityRestUtils {
 
-        private static Client restClient = ClientBuilder.newClient();
-        private static final Logger LOGGER = Logger.getLogger(TeamCityRestUtils.class);
+    private static Client restClient = ClientBuilder.newClient();
+    private static final Logger LOGGER = Logger.getLogger(TeamCityRestUtils.class);
 
-        public static void initiateAuthenticationFeature(String userName, String password) {
-                HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature
-                        .basic(userName, password);
-                restClient.register(httpAuthenticationFeature);
+    public static void initiateAuthenticationFeature(String userName, String password) {
+        HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basic(userName, password);
+        restClient.register(httpAuthenticationFeature);
     }
 
-        public static Response postObject(String urlToHit, Object objectToSend) {
-                return restClient.target(urlToHit).request(MediaType.APPLICATION_JSON)
-                        .post(Entity.entity(objectToSend, MediaType.APPLICATION_JSON));
+    public static Response postObject(String urlToHit, Object objectToSend) {
+        return restClient.target(urlToHit).request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(objectToSend, MediaType.APPLICATION_JSON));
     }
 
-        public static Object getResponseAsObject(String urlToHit, Class responseTypeAsClass) {
-                LOGGER.info("Firing [ GET ] request to [ " + urlToHit + " ] with response type to return as [ "
-                        + responseTypeAsClass + " ]");
-                return restClient.target(urlToHit).request(MediaType.APPLICATION_XML).get(responseTypeAsClass);
+    public static Object getResponseAsObject(String urlToHit, Class responseTypeAsClass) {
+        LOGGER.info("Firing [ GET ] request to [ " + urlToHit + " ] with response type to return as [ "
+                + responseTypeAsClass + " ]");
+        return restClient.target(urlToHit).request(MediaType.APPLICATION_XML).get(responseTypeAsClass);
     }
 }

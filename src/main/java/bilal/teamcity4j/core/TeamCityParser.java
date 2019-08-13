@@ -34,73 +34,75 @@ import java.time.format.DateTimeFormatter;
  */
 public class TeamCityParser {
 
-        private static final DateTimeFormatter DATE_TIME_FORMATTER_RAW = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmssZ");
-        private static final DateTimeFormatter DATE_TIME_FORMATTER_PRETTY = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER_RAW = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmssZ");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER_PRETTY = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        /**
-         * Returns a single {@link TeamCityProject} object by parsing the <b>/projects</b> node .
-         * Basic project level information is gathered over here .
-         *
-         * @param projectNode : The /projects level node .
-         * @return : A {@link TeamCityProject} object .
-         */
-        public TeamCityProject getSingleProjectFromSingleNode(Node projectNode) {
-                TeamCityProject project = new TeamCityProject();
-                try {
-                        Element projectElement = (Element) projectNode;
-                        project.setProjectId(projectElement.attributeValue("id"));
-                        project.setProjectName(projectElement.attributeValue("name"));
-                        project.setProjectWebUrl(projectElement.attributeValue("webUrl"));
-                        project.setProjectDescription(projectElement.attributeValue("description"));
-                } catch (Exception e) {
-                        // do nothing , let TeamCityHelper handle it.
-                        // we don't need huge error logs , one is enough.
-                }
-                return project;
+    /**
+     * Returns a single {@link TeamCityProject} object by parsing the <b>/projects</b> node . Basic project level
+     * information is gathered over here .
+     *
+     * @param projectNode
+     *            : The /projects level node .
+     * @return : A {@link TeamCityProject} object .
+     */
+    public TeamCityProject getSingleProjectFromSingleNode(Node projectNode) {
+        TeamCityProject project = new TeamCityProject();
+        try {
+            Element projectElement = (Element) projectNode;
+            project.setProjectId(projectElement.attributeValue("id"));
+            project.setProjectName(projectElement.attributeValue("name"));
+            project.setProjectWebUrl(projectElement.attributeValue("webUrl"));
+            project.setProjectDescription(projectElement.attributeValue("description"));
+        } catch (Exception e) {
+            // do nothing , let TeamCityHelper handle it.
+            // we don't need huge error logs , one is enough.
         }
+        return project;
+    }
 
-        public TeamCityProjectBuildType parsebuildTypeNode(Node buildTypeNode) {
-                TeamCityProjectBuildType teamCityProjectBuildType = new TeamCityProjectBuildType();
-                try {
-                        Element buildTypeElement = (Element) buildTypeNode;
-                        teamCityProjectBuildType.setBuildTypeID(buildTypeElement.attributeValue("id"));
-                        teamCityProjectBuildType.setBuildTypeName(buildTypeElement.attributeValue("name"));
-                        teamCityProjectBuildType.setProjectName(buildTypeElement.attributeValue("projectName"));
-                        teamCityProjectBuildType.setBuildTypeWebUrl(buildTypeElement.attributeValue("href"));
-                } catch (Exception e) {
-                        // do nothing , let TeamCityHelper handle it
-                        // we don't need huge error logs , one is enough.
-                }
-                return teamCityProjectBuildType;
+    public TeamCityProjectBuildType parsebuildTypeNode(Node buildTypeNode) {
+        TeamCityProjectBuildType teamCityProjectBuildType = new TeamCityProjectBuildType();
+        try {
+            Element buildTypeElement = (Element) buildTypeNode;
+            teamCityProjectBuildType.setBuildTypeID(buildTypeElement.attributeValue("id"));
+            teamCityProjectBuildType.setBuildTypeName(buildTypeElement.attributeValue("name"));
+            teamCityProjectBuildType.setProjectName(buildTypeElement.attributeValue("projectName"));
+            teamCityProjectBuildType.setBuildTypeWebUrl(buildTypeElement.attributeValue("href"));
+        } catch (Exception e) {
+            // do nothing , let TeamCityHelper handle it
+            // we don't need huge error logs , one is enough.
         }
+        return teamCityProjectBuildType;
+    }
 
-        /**
-         * Parses a complete build node and extract important information out of it !
-         *
-         * @param buildHistoryNode
-         * @return
-         */
-        public TeamCityProjectBuild parseBuildHistoryNode(Node buildHistoryNode) {
-                TeamCityProjectBuild teamCityProjectBuild = new TeamCityProjectBuild();
-                try {
-                        Element buildHistoryElement = (Element) buildHistoryNode;
-                        LocalDateTime startDateRaw = LocalDateTime.parse(buildHistoryElement.element("startDate").getStringValue(),
-                                DATE_TIME_FORMATTER_RAW);
-                        LocalDateTime endDateRaw = LocalDateTime.parse(buildHistoryElement.element("finishDate").getStringValue(),
-                                DATE_TIME_FORMATTER_RAW);
+    /**
+     * Parses a complete build node and extract important information out of it !
+     *
+     * @param buildHistoryNode
+     * @return
+     */
+    public TeamCityProjectBuild parseBuildHistoryNode(Node buildHistoryNode) {
+        TeamCityProjectBuild teamCityProjectBuild = new TeamCityProjectBuild();
+        try {
+            Element buildHistoryElement = (Element) buildHistoryNode;
+            LocalDateTime startDateRaw = LocalDateTime.parse(buildHistoryElement.element("startDate").getStringValue(),
+                    DATE_TIME_FORMATTER_RAW);
+            LocalDateTime endDateRaw = LocalDateTime.parse(buildHistoryElement.element("finishDate").getStringValue(),
+                    DATE_TIME_FORMATTER_RAW);
 
-                        teamCityProjectBuild.setStartDate(startDateRaw.format(DATE_TIME_FORMATTER_PRETTY));
-                        teamCityProjectBuild.setEndDate(endDateRaw.format(DATE_TIME_FORMATTER_PRETTY));
+            teamCityProjectBuild.setStartDate(startDateRaw.format(DATE_TIME_FORMATTER_PRETTY));
+            teamCityProjectBuild.setEndDate(endDateRaw.format(DATE_TIME_FORMATTER_PRETTY));
 
-                        teamCityProjectBuild.setBuildId(buildHistoryElement.attributeValue("id"));
-                        teamCityProjectBuild.setBuildType(buildHistoryElement.attributeValue("buildTypeId"));
-                        teamCityProjectBuild.setState(buildHistoryElement.attributeValue("state"));
-                        teamCityProjectBuild.setStatus(buildHistoryElement.attributeValue("status"));
-                        teamCityProjectBuild.setWebUrl(buildHistoryElement.attributeValue("href"));
-                } catch (Exception e) {
-                        // do nothing , let TeamCityHelper handle it
-                        // we don't need huge error logs , one is enough.
-                }
-                return teamCityProjectBuild;
+            teamCityProjectBuild.setBuildId(buildHistoryElement.attributeValue("id"));
+            teamCityProjectBuild.setBuildType(buildHistoryElement.attributeValue("buildTypeId"));
+            teamCityProjectBuild.setState(buildHistoryElement.attributeValue("state"));
+            teamCityProjectBuild.setStatus(buildHistoryElement.attributeValue("status"));
+            teamCityProjectBuild.setWebUrl(buildHistoryElement.attributeValue("href"));
+        } catch (Exception e) {
+            // do nothing , let TeamCityHelper handle it
+            // we don't need huge error logs , one is enough.
         }
+        return teamCityProjectBuild;
+    }
 }

@@ -29,49 +29,49 @@ import java.util.List;
  * @author Bilal Asif Mirza (github.com/BilalAM)
  */
 public class TeamCityProjectBuildType {
-        private String buildTypeID;
-        private String buildTypeName;
-        private String projectName;
-        private String buildTypeWebUrl;
-        private List<TeamCityProjectBuild> buildHistory;
+    private String buildTypeID;
+    private String buildTypeName;
+    private String projectName;
+    private String buildTypeWebUrl;
+    private List<TeamCityProjectBuild> buildHistory;
 
-        public String getBuildTypeID() {
-                return buildTypeID;
-        }
+    public String getBuildTypeID() {
+        return buildTypeID;
+    }
 
-        public void setBuildTypeID(String buildTypeID) {
-                this.buildTypeID = buildTypeID;
-        }
+    public void setBuildTypeID(String buildTypeID) {
+        this.buildTypeID = buildTypeID;
+    }
 
-        public String getBuildTypeName() {
-                return buildTypeName;
-        }
+    public String getBuildTypeName() {
+        return buildTypeName;
+    }
 
-        public void setBuildTypeName(String buildTypeName) {
-                this.buildTypeName = buildTypeName;
-        }
+    public void setBuildTypeName(String buildTypeName) {
+        this.buildTypeName = buildTypeName;
+    }
 
-        public String getProjectName() {
-                return projectName;
-        }
+    public String getProjectName() {
+        return projectName;
+    }
 
-        public void setProjectName(String projectName) {
-                this.projectName = projectName;
-        }
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
-        public List<TeamCityProjectBuild> getBuildHistory() {
-                return buildHistory;
-        }
+    public List<TeamCityProjectBuild> getBuildHistory() {
+        return buildHistory;
+    }
 
-        public void setBuildHistory(List<TeamCityProjectBuild> buildHistory) {
-                this.buildHistory = buildHistory;
-        }
+    public void setBuildHistory(List<TeamCityProjectBuild> buildHistory) {
+        this.buildHistory = buildHistory;
+    }
 
-        public String getBuildTypeWebUrl() {
-                return buildTypeWebUrl;
-        }
+    public String getBuildTypeWebUrl() {
+        return buildTypeWebUrl;
+    }
 
-        public void setBuildTypeWebUrl(String buildTypeWebUrl) {
-                this.buildTypeWebUrl = buildTypeWebUrl;
-        }
+    public void setBuildTypeWebUrl(String buildTypeWebUrl) {
+        this.buildTypeWebUrl = buildTypeWebUrl;
+    }
 }
