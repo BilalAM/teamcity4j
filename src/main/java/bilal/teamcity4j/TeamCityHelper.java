@@ -93,7 +93,8 @@ public class TeamCityHelper {
                         allProjectsNodes = allProjectsDocument.selectNodes("/projects/project");
                         LOGGER.info("Total nodes [ " + allProjectsNodes.size() + " ] ");
                         for (Node projectNode : allProjectsNodes) {
-                                TeamCityProject teamCityProject = parser.getSingleProjectFromSingleNode(projectNode);
+                                Element projectNodeElement = (Element) projectNode;
+                                TeamCityProject teamCityProject = getProject(projectNodeElement.attributeValue("id"));
                                 allProjects.add(teamCityProject);
                                 LOGGER.info("TeamCityProject [ " + teamCityProject.getProjectName()
                                         + " ] has been parsed and prepared.");
