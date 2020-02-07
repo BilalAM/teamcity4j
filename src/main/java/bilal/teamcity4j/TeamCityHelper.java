@@ -224,6 +224,16 @@ public class TeamCityHelper {
         return buildHistory;
     }
 
+
+    /**
+     * Returns the latest build of a particular build type id
+     * @param buildTypeId
+     * @return
+     */
+    public TeamCityProjectBuild getLatestBuild(String buildTypeId){
+        return getBuildHistoryOfBuildType(buildTypeId).get(0);
+    }
+
     /**
      * Sets the teamcity url .
      *

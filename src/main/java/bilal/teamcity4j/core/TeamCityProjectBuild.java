@@ -93,4 +93,13 @@ public class TeamCityProjectBuild {
         this.endDate = endDate;
     }
 
+
+    @Override
+    public String toString(){
+        return "TeamCityProjectBuild@[id:" + buildId + "] [type:" + buildType + "] [status:" + status
+                + "] [" + "state:" + state + "] [web-url:" + webUrl + "] [startDate:" + startDate +"] [endDate:" + endDate + "]" ;
+
+    }
+
+
 }
